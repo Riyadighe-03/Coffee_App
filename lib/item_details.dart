@@ -2,10 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coffee_app/cart_items.dart';
 import 'package:coffee_app/my_cart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:readmore/readmore.dart';
+
+import 'counter_cubit.dart';
 
 class ItemDetails extends StatefulWidget {
   ItemDetails({super.key, required this.productName, required this.price});
+
   String productName;
   String price;
 
@@ -198,20 +202,28 @@ class _ItemDetailsState extends State<ItemDetails> {
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(30),
                                   border: Border.all(color: Colors.brown)),
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.remove)),
-                                  Text(
-                                    "1",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  IconButton(
-                                      onPressed: () {},
-                                      icon: const Icon(Icons.add)),
-                                ],
+                              child: BlocBuilder<CounterCubit, int>(
+                                builder: (context, state) {
+                                  return Row(
+                                    children: [
+                                      IconButton(
+                                          onPressed: () => context
+                                              .read<CounterCubit>()
+                                              .decrement(),
+                                          icon: const Icon(Icons.remove)),
+                                      Text(
+                                        '$count',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      IconButton(
+                                          onPressed: () => context
+                                              .read<CounterCubit>()
+                                              .increment(),
+                                          icon: const Icon(Icons.add)),
+                                    ],
+                                  );
+                                },
                               ),
                             ),
                           ),
